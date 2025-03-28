@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Schedule</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        h1 {
+            color: #673ab7;
+            text-shadow: 0 0 10px rgba(103, 58, 183, 0.4);
+        }
+        .card {
+            background-color: #ffffff;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(103, 58, 183, 0.5);
+        }
+        .card-body {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        .card-body:hover {
+            border: 2px solid #673ab7;
+            box-shadow: 0 0 20px rgba(103, 58, 183, 0.8);
+        }
+        .badge {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        .badge-available {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .badge-unavailable {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .btn-primary {
+            background-color: #673ab7;
+            border-color: #673ab7;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #5a2ea6;
+            border-color: #5a2ea6;
+            transform: scale(1.1);
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .btn-back {
+            margin-bottom: 20px;
+            color: #673ab7;
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .btn-back:hover {
+            color: #5a2ea6;
+            transform: scale(1.2);
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            color: #673ab7;
+            box-shadow: 0 0 10px rgba(103, 58, 183, 0.4);
+        }
+        footer a {
+            color: #673ab7;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+        footer a:hover {
+            color: #5a2ea6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button onclick="window.history.back()" class="btn-back" data-bs-toggle="tooltip" data-bs-placement="right" title="Go back to the previous page">
+            <i class="fas fa-arrow-left icon"></i>Back
+        </button>
+        <h1 class="text-center">Schedule for {{ movie_name }}</h1>
+        <div class="row">
+            {% if schedule %}
+                {% for hall in schedule %}
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-film icon"></i>{{ hall.Hall_name }}</h5>
+                                <p class="card-text"><i class="fas fa-users icon"></i>Capacity: {{ hall.Capacity }}</p>
+                                <p class="card-text">
+                                    <span class="badge {{ "badge-available" if hall.Availability_status == 1 else "badge-unavailable" }}">
+                                        {{ "Available" if hall.Availability_status == 1 else "Not Available" }}
+                                    </span>
+                                </p>
+                                <p class="card-text"><i class="fas fa-calendar-alt icon"></i>Date: {{ hall.Date }}</p>
+                                <p class="card-text"><i class="fas fa-clock icon"></i>Time: {{ hall.Time }}</p>
+                                {% if hall.Availability_status == 1 %}
+                                <a href="/hall-seats/{{ hall.ShowID }}" class="btn btn-primary" data-bs-toggle="tooltip" title="Check seat availability">
+                                    <i class="fas fa-chair icon"></i>View Seats
+                                </a>
+                                {% else %}
+                                    <button class="btn btn-secondary" disabled>
+                                        <i class="fas fa-times-circle icon"></i>Unavailable
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No schedules available.</p>
+            {% endif %}
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 Palestine Cinema</p>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"></script>
+    <script>
+        // Enable tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+</body>
+</html>

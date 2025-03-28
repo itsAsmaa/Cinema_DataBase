@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Customer</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="shortcut icon" type="image/icon" href="../static/img/logo_for_palestine_cinema.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #bf5bea;
+            font-size: 36px;
+        }
+        .container {
+            background: #ffffff;
+            border: 2px solid #bf5bea;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            animation: fadeInUp 1s;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .form-control {
+            background-color: #f9f9f9;
+            border: 2px solid #bf5bea;
+            color: #333;
+            border-radius: 6px;
+            padding: 10px 15px;
+        }
+        .form-control::placeholder {
+            color: #888;
+        }
+        .form-control:focus {
+            outline: none;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px #bf5bea;
+        }
+        .btn-submit {
+            background-color: #bf5bea;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background-color: #a64bd8;
+        }
+        .results {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .results h3 {
+            color: #bf5bea;
+        }
+        .results ul {
+            list-style: none;
+            padding: 0;
+        }
+        .results li {
+            background: #f3e8f9;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .back-link {
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #bf5bea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Search Customer</h1>
+    </header>
+    <div class="container">
+        <form method="post">
+            <div class="form-group">
+                <label for="search_query">Enter Customer Name</label>
+                <input type="text" class="form-control" id="search_query" name="search_query" placeholder="Search..." required>
+            </div>
+            <button type="submit" class="btn-submit">Search</button>
+        </form>
+        {% if customers %}
+            <div class="results">
+                <h3>Search Results:</h3>
+                <ul>
+                    {% for customer in customers %}
+                        <li>
+                            <strong>Name:</strong> {{ customer.customer_name }}<br>
+                            <strong>Phone:</strong> {{ customer.customer_phone }}<br>
+                            <strong>Feedback:</strong> {{ customer.customer_feedback }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% elif error_message %}
+            <p>{{ error_message }}</p>
+        {% endif %}
+        <div class="back-link">
+            <a href="/home">Back to Customer Management</a>
+        </div>
+    </div>
+</body>
+</html>

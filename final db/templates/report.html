@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Performance Report</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Base Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #1e1e2f;
+            color: #ffffff;
+        }
+        header {
+            background: linear-gradient(45deg, #bf5bea, #7239a8);
+            padding: 40px 20px;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+        }
+        header p {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: #e0c1f6;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 30px 5%;
+        }
+        h2 {
+            font-size: 2rem;
+            border-left: 5px solid #bf5bea;
+            padding-left: 10px;
+            margin-bottom: 20px;
+            color: #bf5bea;
+        }
+
+        /* Cards for Summary Metrics */
+        .summary-metrics {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .metric-card {
+            background: #2b2b44;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 10px;
+            width: 30%;
+            min-width: 250px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .metric-card i {
+            font-size: 2.5rem;
+            color: #bf5bea;
+            margin-bottom: 15px;
+        }
+        .metric-card h3 {
+            margin: 10px 0 5px;
+            font-size: 1.8rem;
+        }
+        .metric-card p {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            background: #2b2b44;
+            color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+        }
+        table th {
+            background: #bf5bea;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        table tr:nth-child(even) {
+            background: #24243b;
+        }
+        table tr:hover {
+            background: #3c3c5b;
+        }
+        table tr td {
+            border-bottom: 1px solid #3c3c5b;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(45deg, #7239a8, #bf5bea);
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-film"></i> Cinema Performance Report</h1>
+        <p>Track your cinema's success with key metrics and insights</p>
+    </header>
+
+    <section>
+        <h2>Summary Metrics</h2>
+        <div class="summary-metrics">
+            <div class="metric-card">
+                <i class="fas fa-users"></i>
+                <h3>{{ total_customers }}</h3>
+                <p>Total Customers</p>
+            </div>
+            <div class="metric-card">
+                <i class="fas fa-ticket-alt"></i>
+                <h3>{{ total_bookings }}</h3>
+                <p>Total Bookings</p>
+            </div>
+            <div class="metric-card">
+                <i class="fas fa-video"></i>
+                <h3>{{ movies_available }}</h3>
+                <p>Movies Available</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Recent Customers</h2>
+        <table>
+            <tr>
+                <th>Customer ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Feedback</th>
+            </tr>
+            {% for customer in recent_customers %}
+            <tr>
+                <td>{{ customer.CustomerID }}</td>
+                <td>{{ customer.FirstName }}</td>
+                <td>{{ customer.Phone }}</td>
+                <td>{{ customer.Feedback }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+    <section>
+        <h2>Bookings Per Month</h2>
+        <table>
+            <tr>
+                <th>Month</th>
+                <th>Total Bookings</th>
+            </tr>
+            {% for record in bookings_per_month %}
+            <tr>
+                <td>{{ record.Month }}</td>
+                <td>{{ record.Total_Bookings }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+    <section>
+                <p>Food Revenue</p>
+            </div>
+            <div class="metric-card">
+                <i class="fas fa-money-bill"></i>
+                <h3>{{ total_revenue.total_revenue }}</h3>
+                <p>Total Revenue</p>
+            </div>
+        
+    </section>
+
+
+
+    <section>
+        <h2>Most Popular Movies</h2>
+        <table>
+            <tr>
+                <th>Movie</th>
+                <th>Tickets Sold</th>
+            </tr>
+            {% for movie in most_popular_movies %}
+            <tr>
+                <td>{{ movie.MovieName }}</td>
+                <td>{{ movie.TotalTicketsSold }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+    <section>
+        <h2>Hall Utilization Rates</h2>
+        <table>
+            <tr>
+                <th>Hall</th>
+                <th>Utilization Rate (%)</th>
+            </tr>
+            {% for hall in hall_utilization %}
+            <tr>
+                <td>{{ hall.Hall_name }}</td>
+                <td>{{ hall.UtilizationRate }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+    <section>
+        <h2>Revenue by Genre</h2>
+        <table>
+            <tr>
+                <th>Genre</th>
+                <th>Total Revenue</th>
+            </tr>
+            {% for genre in revenue_per_genre %}
+            <tr>
+                <td>{{ genre.Genre }}</td>
+                <td>{{ genre.TotalRevenue }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+    
+</body>
+</html>

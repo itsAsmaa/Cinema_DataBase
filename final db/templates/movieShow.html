@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/icon" href="../static/img/logo.jpg"/>
+    <title>Book Movies</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            background-color: #28313b;
+            background-size: cover;
+            background-attachment: fixed;
+            background: url('static/img/bk.jpg') no-repeat center center fixed; /* Add background image */
+            background-size: cover; /* Ensure the background covers the entire body */
+        }
+
+       
+
+        .movie-card {
+            background-color: #1c1f25;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .movie-card img {
+            border-radius: 15px 15px 0 0;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .btn-book {
+            background-color: #bf5bea;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .btn-book:hover {
+            background-color: #bf5bea;
+        }
+
+        .btn-home {
+            background-color: #14336d;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .btn-home:hover {
+            background-color: #ff6f61;
+        }
+
+        footer {
+            background-color: #2b2f3a;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .navbar-brand {
+            display: block;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff;
+        }
+
+        .navbar {
+            background-color: #3a3f50;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+<div class="content">
+
+
+    <div class="container my-5">
+        <a href="/" class="btn-home">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+
+        <h1 class="text-center mb-4">Available Movies <i class="fas fa-ticket-alt"></i></h1>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for movie in movies %}
+            <div class="col">
+                <div class="card movie-card">
+                    <img src="{{ movie['PosterPath'] }}" class="card-img-top" alt="Movie Poster">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                           <a href="/movie/{{ movie['MovieID'] }}" 
+                               style="text-decoration: none; color: #ffffff; font-weight: bold;">
+                                <i class="fas fa-film"></i> {{ movie['MovieName'] }}
+                            </a>
+                        </h5>
+                        <a href="/booking/{{ movie['MovieID'] }}?customer_id={{ customer_id }}" class="btn btn-book w-100">
+                            <i class="fas fa-ticket-alt"></i> Book Now
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Palestine Cinema. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</body>
+</html>

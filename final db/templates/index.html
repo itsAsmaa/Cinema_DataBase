@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palestine Cinema</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #bf5bea;
+            --secondary-color: #28313b;
+            --accent-color: #ff6f61;
+            --text-color: #ffffff;
+            --background-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-color);
+            padding: 20px 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .login-button {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: var(--secondary-color);
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            padding: 15px;
+            position: sticky;
+            top: 80px;
+            z-index: 999;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            margin: 0 15px;
+            font-size: 1.2em;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 90vh;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(40, 49, 59, 0.8);
+        }
+
+        .hero h2 {
+            z-index: 1;
+            font-size: 3em;
+            text-align: center;
+            animation: slideInFromLeft 1s ease-in-out;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            z-index: 1;
+        }
+
+        .cta-buttons a {
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            font-size: 1.2em;
+            border-radius: 5px;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .cta-buttons a:hover {
+            background-color: var(--secondary-color);
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .movies-section {
+            padding: 50px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .movies-section h2 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2.5em;
+        }
+
+        .movies-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .movie-card {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .movie-card h3 {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .movie-card .info-icon {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        .footer-social a {
+            color: var(--text-color);
+            margin: 0 5px;
+            font-size: 1.5em;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer-social a:hover {
+            color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.hero {
+    position: relative;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: white;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(40, 49, 59, 0.7); /* Optional overlay to improve text visibility */
+    z-index: 0;
+}
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-film"></i> Palestine Cinema</h1>
+        <button class="login-button" onclick="window.location.href='/beforeLog'"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </header>
+    <nav>
+        <a href="#now-showing"><i class="fas fa-play"></i> Now Showing</a>
+        <a href="#upcoming"><i class="fas fa-forward"></i> Upcoming</a>
+        <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+        <a href="/food-court"><i class="fas fa-utensils"></i> Cafeteria</a>
+        <a href="{{ url_for('report') }}"> Report</a>
+    </nav>
+    <div class="hero">
+        <video autoplay muted loop class="video-background">
+            <source src="static/img/AdobeStock_244537161_Video_HD_preview.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-content">
+            <h2>Experience Movies Like Never Before</h2>
+            <div class="cta-buttons">
+                <a href="#now-showing">View Now Showing</a>
+                <a href="#upcoming">See Upcoming</a>
+            </div>
+        </div>
+    </div>
+    
+    <section class="movies-section" id="now-showing">
+        <h2><i class="fas fa-film"></i> Now Showing</h2>
+        <div class="movies-grid">
+            <div class="movie-card">
+                <img src="static/img/panda.jpeg" alt="Movie 1">
+                <h3>Movie Title 1</h3>
+                <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+            </div>
+            <div class="movie-card">
+                <img src="static/img/moana.jpeg" alt="Movie 2">
+                <h3>Movie Title 2</h3>
+                <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+            </div>
+            <div class="movie-card">
+                <img src="static/img/hero.jpeg" alt="Movie 3">
+                <h3>Movie Title 3</h3>
+                <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+            </div>
+        </div>
+    </section>
+    <section class="movies-section" id="upcoming">
+        <h2><i class="fas fa-clock"></i> Upcoming</h2>
+        <div class="movies-grid">
+            <div class="movie-card">
+                <img src="static/img/red.jpeg" alt="Upcoming Movie 1">
+                <h3>Upcoming Movie 1</h3>
+                <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+            </div>
+            <div class="movie-card">
+                <img src="static/img/robot.jpg" alt="Upcoming Movie 2">
+                <h3>Upcoming Movie 2</h3>
+                <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+            </div>
+            <div class="movie-card">
+                <img src="static/img/venom.jpeg" alt="Upcoming Movie 3">
+                <h3>Upcoming Movie 3</h3>
+                <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 Palestine Cinema. All rights reserved.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="footer-social">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

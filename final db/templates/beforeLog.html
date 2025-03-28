@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Choose Your Role</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .login-section {
+            text-align: center;
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s ease-in-out;
+            margin: 20px;
+        }
+
+        .login-section h1 {
+            color: #bf5bea;
+            margin-bottom: 40px;
+            font-size: 28px;
+        }
+
+        .service-content {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .single-service-item {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .single-service-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .single-service-icon {
+            font-size: 50px;
+            color: #bf5bea;
+            margin-bottom: 15px;
+        }
+
+        .single-service-item h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .single-service-item a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #bf5bea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .single-service-item a:hover {
+            background-color: #a64bd8;
+            transform: translateY(-3px);
+        }
+
+        .back-home {
+            margin-top: 20px;
+        }
+
+        .back-home a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #bf5bea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-home a:hover {
+            background-color: #a64bd8;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="login-section">
+        <h1>Choose Your Role to Login</h1>
+
+        <div class="service-content">
+            <!-- Ticket Vendor Option -->
+            <div class="single-service-item">
+                <div class="single-service-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <h2>Ticket Vendor</h2>
+                <a href="/Tlog">Login as Vendor</a>
+            </div>
+
+            <!-- Customer Option -->
+            <div class="single-service-item">
+                <div class="single-service-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2>Customer</h2>
+                <a href="/Clog">Login as Customer</a>
+            </div>
+
+            <!-- Cashier Option -->
+            <div class="single-service-item">
+                <div class="single-service-icon">
+                    <i class="fas fa-cash-register"></i>
+                </div>
+                <h2>Cashier</h2>
+                <a href="/CashierLog">Login as Cashier</a>
+            </div>
+        </div>
+
+        <div class="back-home">
+            <a href="/">Back to Home</a>
+        </div>
+    </section>
+</body>
+</html>

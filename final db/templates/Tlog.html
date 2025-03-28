@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Ticket Vendor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f3e7fe, #e3d5f8);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background: #ffffff;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            animation: fadeIn 1s ease;
+        }
+
+        .form-container h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #bf5bea;
+        }
+
+        .form-container p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            color: #444;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d9d9d9;
+            border-radius: 10px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #bf5bea;
+            box-shadow: 0 4px 10px rgba(106, 13, 173, 0.2);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #aaa;
+        }
+
+        .btn-login {
+            display: inline-block;
+            width: 100%;
+            padding: 12px 0;
+            background-color: #bf5bea;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(106, 13, 173, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #570da3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(106, 13, 173, 0.6);
+        }
+
+        .flash-message {
+            margin-top: 20px;
+        }
+
+        .flash-message .alert {
+            display: inline-block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #ffeded;
+            color: #d9534f;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .back-link {
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #bf5bea;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Log in - Ticket Vendor</h2>
+        <p>Please fill out the form below to log in</p>
+        <form action="/ticketvendorlogin" method="POST">
+            <div class="form-group">
+                <label for="name">User Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Your User Name" required>
+            </div>
+            <div class="form-group">
+                <label for="pass">Password</label>
+                <input type="password" class="form-control" id="pass" name="pass" placeholder="Enter Password" required>
+            </div>
+            <button type="submit" class="btn-login">Log in</button>
+        </form>
+        <div class="flash-message">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="back-link">
+            <p><a href="/beforeLog">Back to Role Selection</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

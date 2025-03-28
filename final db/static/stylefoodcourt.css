@@ -1,0 +1,109 @@
+
+html{
+    background-color: black;
+  }
+  ul {
+      list-style-type: none;
+      margin: 0;
+      overflow: hidden;
+      background-color: black;
+  }
+  
+  li a {
+      display: block;
+      color: red;
+      text-align: left;
+      text-decoration: none;
+    }
+  
+    .image {
+      display: block;
+        margin-right: auto;
+        float: right;
+        padding: 10px
+    }
+  
+  
+  #midsection {
+    background-color: black;
+    width: 70%;
+    margin: 0 auto;
+  }
+  
+  .image1 {
+    display: block;
+      margin-right: auto;
+      width: 38%;
+      float: left;
+  }
+  
+  
+  .about-section {
+    text-align: right;
+    padding: 50px;
+    line-height: 3em;
+    color: red;
+    font-family: sans-serif;
+  }
+  
+  .h2 {
+    text-align: center;
+  }
+  
+  .image3 {
+    float: left;
+    padding: 40px;
+  }
+  
+  .image2 {
+    float: left;
+    padding: 40px;
+  }
+  
+  .row {
+    float: left;
+    display: block;
+    margin-left: 5rem;
+    padding: 5px
+  }
+  
+  #title {
+    color: red;
+    font-family: sans-serif;
+    padding: 10px
+  }
+  
+  .trailers {
+    padding: 10px;
+    float: left;
+    display: block;
+  }
+  
+  #trailer-section {
+    background-color: black;
+    width: 70%;
+    margin: 0 auto;
+  }
+  
+  .logo-home {
+    padding: 10px;
+  }
+  
+  #midsection2 {
+    background-color: black;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .row2 {
+    float: left;
+    display: block;
+    margin-left: 5rem;
+  }
+  
+  .snacks {
+    text-decoration: underline;
+    color: red;
+    margin-left: 5rem;
+  }
+  

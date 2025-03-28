@@ -1,0 +1,840 @@
+
+drop database if exists cinema;
+create database cinema;
+use cinema;
+
+CREATE TABLE Employees (
+    Employee_id INT PRIMARY KEY,
+    Employee_name VARCHAR(50),
+    salary DECIMAL(10, 2),
+    contact_no VARCHAR(15),
+    date_of_birth DATE
+);
+
+CREATE TABLE Cashier (
+    Employee_id INT PRIMARY KEY,
+  
+    FOREIGN KEY (Employee_id) REFERENCES Employees(Employee_id)
+);
+
+CREATE TABLE Ticket_vendor (
+    Employee_id INT PRIMARY KEY,
+    FOREIGN KEY (Employee_id) REFERENCES Employees(Employee_id)
+);
+
+CREATE TABLE Food_item (
+    item_id INT PRIMARY KEY,
+    Item_name VARCHAR(50),
+    Quantity_Available INT,
+    Price DECIMAL(10, 2)
+);
+
+CREATE TABLE Customer (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_name VARCHAR(255) NOT NULL,
+    customer_phone VARCHAR(20) NOT NULL,
+    customer_feedback TEXT,
+    customer_password VARCHAR(255) NOT NULL
+);
+CREATE TABLE Seat (
+    Seat_id INT PRIMARY KEY,
+    Seat_Row char(20),
+    Seat_Column char(20)
+);
+
+CREATE TABLE Hall (
+    Hall_ID INT PRIMARY KEY,
+    Hall_name VARCHAR(50),
+    Capacity INT,
+    Availability_status BOOLEAN
+);
+
+CREATE TABLE Movie (
+    MovieID INT PRIMARY KEY,
+    MovieName VARCHAR(100),
+    Director VARCHAR(50),
+    Language VARCHAR(30),
+    Title VARCHAR(100),
+    Genre VARCHAR(30),
+    Release_Date DATE,
+    Duration INT,
+    Movie_Description TEXT,
+    Price DECIMAL(10, 2),
+    PosterPath VARCHAR(255)
+);
+CREATE TABLE Ticket (
+    TicketID INT PRIMARY KEY,
+    MovieID INT,
+    CustomerID INT,
+    HallID INT,
+    VendorID INT,
+    Date DATE,
+    Time TIME,
+    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(customer_id),
+    FOREIGN KEY (HallID) REFERENCES Hall(Hall_ID),
+    FOREIGN KEY (VendorID) REFERENCES Ticket_vendor(Employee_id)
+);
+
+
+ALTER TABLE Ticket
+ADD Price DECIMAL(10, 2);
+CREATE TABLE Sales (
+    SalesID INT PRIMARY KEY,
+    CustomerID INT,
+    FoodItemID INT,
+    CashierID INT,
+    Quantity INT,
+    Total_Price DECIMAL(10, 2),
+    SaleDate DATE,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(customer_id),
+    FOREIGN KEY (FoodItemID) REFERENCES Food_item(item_id),
+    FOREIGN KEY (CashierID) REFERENCES Cashier(Employee_id)
+);
+
+
+CREATE TABLE movie_show (
+    ShowID INT AUTO_INCREMENT PRIMARY KEY,
+    MovieID INT NOT NULL,
+    HallID INT NOT NULL,
+    ShowDate DATE NOT NULL,
+    ShowTime TIME NOT NULL,
+    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID) ON DELETE CASCADE,
+    FOREIGN KEY (HallID) REFERENCES Hall(Hall_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE hall_seat (
+    BookingID INT AUTO_INCREMENT PRIMARY KEY,
+    ShowID INT NOT NULL,
+    SeatID INT NOT NULL,
+    IsBooked BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (ShowID) REFERENCES movie_show(ShowID) ON DELETE CASCADE,
+    FOREIGN KEY (SeatID) REFERENCES Seat(Seat_id) ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE Seat_Booking (
+    BookingID INT AUTO_INCREMENT PRIMARY KEY,
+    HallID INT NOT NULL,
+    SeatID INT NOT NULL,
+    MovieID INT NOT NULL,
+    BookingDate DATE NOT NULL,
+    BookingTime TIME NOT NULL,
+    IsBooked BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (HallID) REFERENCES Hall(Hall_ID) ON DELETE CASCADE,
+    FOREIGN KEY (SeatID) REFERENCES Seat(Seat_id) ON DELETE CASCADE,
+    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID) ON DELETE CASCADE
+);
+
+CREATE TABLE shown_in (
+    MovieID INT,
+    HallID INT,
+    PRIMARY KEY (MovieID, HallID),
+    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID),
+    FOREIGN KEY (HallID) REFERENCES Hall(Hall_ID)
+);
+
+ALTER TABLE Seat
+ADD HallID INT,
+ADD FOREIGN KEY (HallID) REFERENCES Hall(Hall_ID);
+
+
+ALTER TABLE Hall
+ADD MovieID INT,
+ADD FOREIGN KEY (MovieID) REFERENCES Movie(MovieID);
+
+
+-- تفعيل العلاقة بين Ticket_vendor و Employees
+ALTER TABLE Ticket_vendor
+ADD CONSTRAINT fk_ticket_vendor_employee
+FOREIGN KEY (Employee_id)
+REFERENCES Employees(Employee_id)
+ON DELETE CASCADE;
+
+-- تفعيل العلاقة بين Cashier و Employees
+ALTER TABLE Cashier
+ADD CONSTRAINT fk_cashier_employee
+FOREIGN KEY (Employee_id)
+REFERENCES Employees(Employee_id)
+ON DELETE CASCADE;
+
+-- تفعيل العلاقة بين Ticket و Ticket_vendor
+ALTER TABLE Ticket
+ADD CONSTRAINT fk_ticket_vendor
+FOREIGN KEY (vendorId)
+REFERENCES Ticket_vendor(Employee_id)
+ON DELETE CASCADE;
+
+-- تفعيل العلاقة بين Sales و Cashier
+ALTER TABLE Sales
+ADD CONSTRAINT fk_sales_cashier
+FOREIGN KEY (CashierID)
+REFERENCES Cashier(Employee_id)
+ON DELETE CASCADE;
+
+ALTER TABLE Movie
+ADD Poster LONGBLOB;
+
+
+UPDATE Movie
+SET Poster = LOAD_FILE('C:\\Users\\Lenovo\\OneDrive\\Desktop\\my project\\static\\img\\photo1.jpg')
+WHERE MovieID = 1;
+SHOW VARIABLES LIKE 'secure_file_priv';
+UPDATE Movie
+SET Poster = LOAD_FILE('C:\\Users\\Lenovo\\OneDrive\\Desktop\\my project\\static\\img\\photo2.jpg')
+WHERE MovieID = 1;
+
+UPDATE Movie
+SET Poster = LOAD_FILE('C:\\Users\\Lenovo\\OneDrive\\Desktop\\my project\\static\\img\\photo3.jpg')
+WHERE MovieID = 1;
+
+SET SQL_SAFE_UPDATES = 0;
+
+ALTER TABLE Movie DROP COLUMN Poster;
+
+SHOW TABLES;
+ALTER TABLE Hall
+DROP FOREIGN KEY hall_ibfk_1;
+ALTER TABLE Movie ADD COLUMN Price DECIMAL(5, 2) NOT NULL DEFAULT 0.00;
+
+SHOW PROCESSLIST;
+ALTER TABLE shown_in
+ADD COLUMN Start_time TIME;
+ALTER TABLE shown_in
+ADD COLUMN Date DATE;
+
+ALTER TABLE Movie
+ADD PosterPath VARCHAR(255);
+
+
+UPDATE Movie
+SET PosterPath = '/static/img/photo1.jpg'
+WHERE MovieID = 1;
+
+UPDATE Movie
+SET PosterPath = '/static/img/photo2.jpg'
+WHERE MovieID = 2;
+UPDATE Movie
+SET PosterPath = '/static/img/photo3.jpg'
+WHERE MovieID = 3;
+UPDATE Movie
+SET PosterPath = '/static/img/photo4.jpg'
+WHERE MovieID = 4;
+UPDATE Movie
+SET PosterPath = '/static/img/photo5.jpg'
+WHERE MovieID = 5;
+SELECT PosterPath FROM Movie;
+
+ALTER TABLE shown_in
+DROP FOREIGN KEY shown_in_ibfk_1;
+
+INSERT INTO movie (MovieID, MovieName, Director, Language, Title, Genre, Release_Date, Duration, Movie_Description, PosterPath)
+VALUES (10, 'Test Movie', 'Test Director', 'English', 'Test Title', 'Drama', '2025-01-01', 120, 'Test Description', '/static/img/test.jpg');
+
+update movie 
+set posterPath="/static/img/photo7.webp"
+where movieID=10;
+
+
+SHOW CREATE TABLE shown_in;
+
+ALTER TABLE shown_in
+ADD CONSTRAINT shown_in_ibfk_1
+FOREIGN KEY (MovieID) REFERENCES Movie(MovieID)
+ON DELETE CASCADE;
+delete from movie;
+INSERT INTO movie (MovieID, MovieName, Director, Language, Title, Genre, Release_Date, Duration, Movie_Description, PosterPath)
+VALUES
+(1, 'Avatar', 'James Cameron', 'English', 'Avatar', 'Sci-Fi', '2009-12-18', 162, 'A Marine on Pandora.', '/static/img/photo1.jpg'),
+(2, 'The Godfather', 'Francis Ford Coppola', 'English', 'The Godfather', 'Crime', '1972-03-24', 175, 'Mafia family story.', '/static/img/photo2.jpg'),
+(3, 'The Dark Knight', 'Christopher Nolan', 'English', 'The Dark Knight', 'Action', '2008-07-18', 152, 'Batman fights Joker.', '/static/img/photo3.jpg'),
+(4, 'Inception', 'Christopher Nolan', 'English', 'Inception', 'Sci-Fi', '2010-07-16', 148, 'Dreams within dreams.', '/static/img/photo4.jpg'),
+(5, 'Titanic', 'James Cameron', 'English', 'Titanic', 'Romance', '1997-12-19', 195, 'Love story on the Titanic.', '/static/img/photo5.jpg'),
+(6, 'Interstellar', 'Christopher Nolan', 'English', 'Interstellar', 'Sci-Fi', '2014-11-07', 169, 'Exploration of space.', '/static/img/photo6.jpg'),
+(7, 'Pulp Fiction', 'Quentin Tarantino', 'English', 'Pulp Fiction', 'Crime', '1994-10-14', 154, 'Intertwining stories.', '/static/img/photo7.webp'),
+(8, 'The Matrix', 'Lana Wachowski', 'English', 'The Matrix', 'Sci-Fi', '1999-03-31', 136, 'Virtual reality world.', '/static/img/photo8.jpg'),
+(9, 'Forrest Gump', 'Robert Zemeckis', 'English', 'Forrest Gump', 'Drama', '1994-07-06', 142, 'Life story of Forrest.', '/static/img/photo9.jpg'),
+(10, 'The Avengers', 'Joss Whedon', 'English', 'The Avengers', 'Action', '2012-05-04', 143, 'Superheroes team up.', '/static/img/photo10.jpg');
+
+-------------------------------------------------------------
+
+
+
+INSERT INTO hall (Hall_ID, Hall_name, Capacity, Availability_status)
+VALUES
+(1, 'Hall 1', 150, 1),
+(2, 'Hall 2', 120, 1),
+(3, 'Hall 3', 200, 1),
+(4, 'Hall 4', 180, 1),
+(5, 'Hall 5', 100, 1),
+(6, 'Hall 6', 130, 1),
+(7, 'Hall 7', 160, 1),
+(8, 'Hall 8', 140, 1),
+(9, 'Hall 9', 110, 1),
+(10, 'Hall 10', 170, 1);
+
+
+
+INSERT INTO shown_in (MovieID, HallID, Start_time, Date)
+VALUES
+(1, 1, '18:00:00', '2025-01-01'),
+(1, 2, '20:00:00', '2025-01-01'),
+(2, 1, '18:00:00', '2025-01-02'),
+(2, 2, '20:00:00', '2025-01-02'),
+(3, 1, '19:00:00', '2025-01-03'),
+(3, 2, '21:00:00', '2025-01-03'),
+(4, 3, '17:00:00', '2025-01-04'),
+(5, 3, '19:30:00', '2025-01-05'),
+(6, 4, '20:00:00', '2025-01-06'),
+(7, 5, '21:00:00', '2025-01-07');
+INSERT INTO shown_in (MovieID, HallID, Start_time, Date)
+VALUES (7, 4, '18:00:00', '2025-01-08');
+
+INSERT INTO customer (customer_id, customer_name, customer_phone, customer_feedback, customer_password)
+VALUES
+(1, 'Jane Doe', '555-1111', 'Amazing experience!', 'password1'),
+(2, 'Chris Green', '555-2222', 'Loved the movie!', 'password2'),
+(3, 'Emily Smith', '555-3333', 'Great seats!', 'password3'),
+(4, 'Michael White', '555-4444', 'Good popcorn.', 'password4'),
+(5, 'Sarah Johnson', '555-5555', 'Nice hall!', 'password5'),
+(6, 'David Brown', '555-6666', 'Wonderful staff.', 'password6'),
+(7, 'Anna Wilson', '555-7777', 'Excellent sound.', 'password7'),
+(8, 'James Black', '555-8888', 'Comfortable seats.', 'password8'),
+(9, 'Laura Harris', '555-9999', 'Enjoyed it.', 'password9'),
+(10, 'Robert Lewis', '555-0000', 'Fantastic experience.', 'password10');
+
+
+INSERT INTO seat (Seat_id, Seat_Row, Seat_Column)
+VALUES
+(1, 'A', 1),
+(2, 'A', 2),
+(3, 'A', 3),
+(4, 'A', 4),
+(5, 'B', 1),
+(6, 'B', 2),
+(7, 'B', 3),
+(8, 'B', 4),
+(9, 'C', 1),
+(10, 'C', 2),
+(11, 'C', 3),
+(12, 'C', 4),
+(13, 'D', 1),
+(14, 'D', 2),
+(15, 'D', 3),
+(16, 'D', 4);
+
+INSERT INTO seat (Seat_id, Seat_Row, Seat_Column)
+VALUES
+(17, 'A', 1),
+(18, 'A', 2),
+(19, 'A', 3),
+(20, 'A', 4),
+(21, 'B', 1),
+(22, 'B', 2),
+(23, 'B', 3),
+(24, 'B', 4),
+(25, 'C', 1),
+(26, 'C', 2),
+(27, 'C', 3),
+(28, 'C', 4),
+(29, 'D', 1),
+(30, 'D', 2),
+(31, 'D', 3),
+(32, 'D', 4),
+(33, 'A', 1),
+(34, 'A', 2),
+(35, 'A', 3),
+(36, 'A', 4),
+(37, 'B', 1),
+(38, 'B', 2),
+(39, 'B', 3),
+(40, 'B', 4),
+(41, 'C', 1),
+(42, 'C', 2),
+(43, 'C', 3),
+(44, 'C', 4),
+(45, 'D', 1),
+(46, 'D', 2),
+(47, 'D', 3),
+(48, 'D', 4),
+(49, 'A', 1),
+(50, 'A', 2),
+(51, 'A', 3),
+(52, 'A', 4),
+(53, 'B', 1),
+(54, 'B', 2),
+(55, 'B', 3),
+(56, 'B', 4),
+(57, 'C', 1),
+(58, 'C', 2),
+(59, 'C', 3),
+(60, 'C', 4),
+(61, 'D', 1),
+(62, 'D', 2),
+(63, 'D', 3),
+(64, 'D', 4),
+(65, 'A', 1),
+(66, 'A', 2),
+(67, 'A', 3),
+(68, 'A', 4),
+(69, 'B', 1),
+(70, 'B', 2),
+(71, 'B', 3),
+(72, 'B', 4),
+(73, 'C', 1),
+(74, 'C', 2),
+(75, 'C', 3),
+(76, 'C', 4),
+(77, 'D', 1),
+(78, 'D', 2),
+(79, 'D', 3),
+(80, 'D', 4),
+(81, 'A', 1),
+(82, 'A', 2),
+(83, 'A', 3),
+(84, 'A', 4),
+(85, 'B', 1),
+(86, 'B', 2),
+(87, 'B', 3),
+(88, 'B', 4),
+(89, 'C', 1),
+(90, 'C', 2),
+(91, 'C', 3),
+(92, 'C', 4),
+(93, 'D', 1),
+(94, 'D', 2),
+(95, 'D', 3),
+(96, 'D', 4),
+(97, 'A', 1),
+(98, 'A', 2),
+(99, 'A', 3),
+(100, 'A', 4),
+(101, 'B', 1),
+(102, 'B', 2),
+(103, 'B', 3),
+(104, 'B', 4),
+(105, 'C', 1),
+(106, 'C', 2),
+(107, 'C', 3),
+(108, 'C', 4),
+(109, 'D', 1),
+(110, 'D', 2),
+(111, 'D', 3),
+(112, 'D', 4),
+(113, 'A', 1),
+(114, 'A', 2),
+(115, 'A', 3),
+(116, 'A', 4),
+(117, 'B', 1),
+(118, 'B', 2),
+(119, 'B', 3),
+(120, 'B', 4),
+(121, 'C', 1),
+(122, 'C', 2),
+(123, 'C', 3),
+(124, 'C', 4),
+(125, 'D', 1),
+(126, 'D', 2),
+(127, 'D', 3),
+(128, 'D', 4),
+(129, 'A', 1),
+(130, 'A', 2),
+(131, 'A', 3),
+(132, 'A', 4),
+(133, 'B', 1),
+(134, 'B', 2),
+(135, 'B', 3),
+(136, 'B', 4),
+(137, 'C', 1),
+(138, 'C', 2),
+(139, 'C', 3),
+(140, 'C', 4),
+(141, 'D', 1),
+(142, 'D', 2),
+(143, 'D', 3),
+(144, 'D', 4),
+(145, 'A', 1),
+(146, 'A', 2),
+(147, 'A', 3),
+(148, 'A', 4),
+(149, 'B', 1),
+(150, 'B', 2),
+(151, 'B', 3),
+(152, 'B', 4),
+(153, 'C', 1),
+(154, 'C', 2),
+(155, 'C', 3),
+(156, 'C', 4),
+(157, 'D', 1),
+(158, 'D', 2),
+(159, 'D', 3),
+(160, 'D', 4);
+
+
+INSERT INTO employees (Employee_id, Employee_name, Salary, Contact_no, Date_of_birth)
+VALUES
+(1, 'John Smith', 3000.00, '555-1234', '1985-01-01'),
+(2, 'Alice Johnson', 3500.00, '555-5678', '1990-05-12'),
+(3, 'Michael Brown', 2800.00, '555-9101', '1992-09-15'),
+(4, 'Sarah Davis', 3100.00, '555-1122', '1983-03-22'),
+(5, 'David Wilson', 4000.00, '555-3344', '1983-12-31'),
+(6, 'Emily Clark', 3200.00, '555-5566', '1991-07-07'),
+(7, 'James Lewis', 2700.00, '555-7788', '1987-11-20'),
+(8, 'Anna Walker', 3600.00, '555-9900', '1993-02-10'),
+(9, 'Robert Hall', 3900.00, '555-1010', '1986-06-18'),
+(10, 'Laura Allen', 3400.00, '555-2020', '1995-04-25');
+
+
+INSERT INTO Ticket_vendor (Employee_id)
+VALUES 
+(1),
+(2),
+(3),
+(4);
+
+insert into Cashier(Employee_id)
+values 
+(5),
+(6);
+
+INSERT INTO ticket (TicketID, MovieID, CustomerID, HallID, VendorID, Date, Time, Price)
+VALUES
+(1, 1, 1, 1, 1, '2025-01-01', '18:00:00', 12.00),
+(2, 2, 2, 2, 2, '2025-01-02', '20:00:00', 15.00),
+(3, 3, 3, 3, 3, '2025-01-03', '19:00:00', 10.00),
+(4, 4, 4, 4, 4, '2025-01-04', '17:00:00', 20.00),
+(5, 5, 5, 5, 1, '2025-01-05', '19:30:00', 18.00),
+(6, 6, 6, 6, 2, '2025-01-06', '20:00:00', 22.00),
+(7, 7, 7, 7, 3, '2025-01-07', '21:00:00', 25.00),
+(8, 8, 8, 8, 4, '2025-01-08', '22:00:00', 30.00),
+(9, 9, 9, 9, 1, '2025-01-09', '23:00:00', 35.00),
+(10, 10, 10, 10, 2, '2025-01-10', '18:00:00', 40.00);
+
+
+UPDATE hall
+SET Capacity = CASE
+    WHEN Hall_ID = 1 THEN 16
+    WHEN Hall_ID = 2 THEN 16
+    WHEN Hall_ID = 3 THEN 16
+    WHEN Hall_ID = 4 THEN 16
+    WHEN Hall_ID = 5 THEN 16
+    WHEN Hall_ID = 6 THEN 16
+    WHEN Hall_ID = 7 THEN 16
+    WHEN Hall_ID = 8 THEN 16
+    WHEN Hall_ID = 9 THEN 16
+    WHEN Hall_ID = 10 THEN 16
+    ELSE Capacity
+END;
+
+
+DROP TABLE Hall_Seat;
+RENAME TABLE seat_booking TO Hall_Seat;
+
+
+
+select * from hall_seat;
+
+
+ALTER TABLE hall_seat DROP FOREIGN KEY hall_seat_ibfk_3;
+
+SELECT CONSTRAINT_NAME
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE TABLE_NAME = 'hall_seat';
+
+select *from  hall_seat;
+select * from Movie_Show;
+
+
+delete from movie_show;
+delete from hall_seat;
+
+
+
+  
+  SELECT * FROM hall_seat;
+
+    DELETE FROM hall_seat;
+DELETE FROM movie_show;
+
+drop table hall_seat;
+drop table movie_show;
+
+
+----------------------------------------------------------
+
+CREATE TABLE movie_show (
+    ShowID INT AUTO_INCREMENT PRIMARY KEY,
+    MovieID INT NOT NULL,
+    HallID INT NOT NULL,
+    ShowDate DATE NOT NULL,
+    ShowTime TIME NOT NULL,
+    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID) ON DELETE CASCADE,
+    FOREIGN KEY (HallID) REFERENCES Hall(Hall_ID) ON DELETE CASCADE
+);
+CREATE TABLE hall_seat (
+    BookingID INT AUTO_INCREMENT PRIMARY KEY,
+    ShowID INT NOT NULL,
+    SeatID INT NOT NULL,
+    IsBooked BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (ShowID) REFERENCES movie_show(ShowID) ON DELETE CASCADE,
+    FOREIGN KEY (SeatID) REFERENCES Seat(Seat_id) ON DELETE CASCADE
+);
+--------------------------------------------------------------
+select * from movie;
+select * from Customer;
+select * from shown_in;
+
+INSERT INTO movie_show (MovieID, HallID, ShowDate, ShowTime)
+VALUES
+(1, 1, '2025-01-01', '18:00:00'),
+(1, 1, '2025-01-02', '20:00:00'),
+(2, 2, '2025-01-01', '19:00:00'),
+(2, 2, '2025-01-03', '21:00:00'),
+(3, 3, '2025-01-01', '18:30:00'),
+(3, 3, '2025-01-04', '20:30:00'),
+(4, 4, '2025-01-01', '22:00:00'),
+(4, 4, '2025-01-05', '23:00:00'),
+(5, 5, '2025-01-02', '17:00:00'),
+(5, 5, '2025-01-06', '19:00:00'),
+(6, 6, '2025-01-03', '20:00:00'),
+(6, 6, '2025-01-07', '22:30:00'),
+(7, 7, '2025-01-02', '19:30:00'),
+(7, 7, '2025-01-08', '21:00:00'),
+(8, 8, '2025-01-03', '18:30:00'),
+(8, 8, '2025-01-09', '20:30:00'),
+(9, 9, '2025-01-04', '19:00:00'),
+(9, 9, '2025-01-10', '21:00:00'),
+(10, 10, '2025-01-05', '18:00:00'),
+(10, 10, '2025-01-11', '20:00:00');
+
+select * FROM HALL_SEAT;
+
+
+ALTER TABLE hall_seat ADD COLUMN HallID INT NOT NULL AFTER BookingID;
+
+
+-- إضافة مفتاح خارجي للتأكد من أن HallID يرتبط بجدول Hall
+ALTER TABLE hall_seat ADD CONSTRAINT fk_hall FOREIGN KEY (HallID) REFERENCES Hall(Hall_ID) ON DELETE CASCADE;
+
+
+DROP TABLE IF EXISTS shown_in;
+
+CREATE TABLE shown_in (
+    MovieID INT NOT NULL,
+    HallID INT NOT NULL,
+    Date DATE NOT NULL,
+    Start_time TIME NOT NULL,
+    PRIMARY KEY (MovieID, HallID, Date, Start_time),
+    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID) ON DELETE CASCADE,
+    FOREIGN KEY (HallID) REFERENCES Hall(Hall_ID) ON DELETE CASCADE
+);
+
+select * from movie_show;
+SELECT HallID, SeatID, ShowID, IsBooked
+FROM hall_seat
+WHERE HallID = 1 
+ORDER BY ShowID;
+SELECT 
+    ms.ShowID,
+    ms.MovieID,
+    m.MovieName,
+    ms.HallID,
+    h.Hall_name,
+    ms.ShowDate,
+    ms.ShowTime,
+    hs.SeatID,
+    s.Seat_Row,
+    s.Seat_Column,
+    hs.IsBooked
+FROM 
+    hall_seat hs
+JOIN 
+    movie_show ms ON hs.ShowID = ms.ShowID
+JOIN 
+    seat s ON hs.SeatID = s.Seat_id
+JOIN 
+    Hall h ON ms.HallID = h.Hall_ID
+JOIN 
+    Movie m ON ms.MovieID = m.MovieID
+WHERE 
+    hs.IsBooked = TRUE
+ORDER BY 
+    ms.ShowID, hs.SeatID;
+    
+    UPDATE hall_seat
+SET IsBooked = FALSE;
+select *from hall_seat;
+delete from hall_seat;
+
+INSERT INTO hall_seat (HallID, SeatID, ShowID, IsBooked)
+VALUES
+
+(1, 1, 1, FALSE), (1, 2, 1, FALSE), (1, 3, 1, FALSE), (1, 4, 1, FALSE),
+(1, 5, 1, FALSE), (1, 6, 1, FALSE), (1, 7, 1, FALSE), (1, 8, 1, FALSE),
+(1, 9, 1, FALSE), (1, 10, 1, FALSE), (1, 11, 1, FALSE), (1, 12, 1, FALSE),
+(1, 13, 1, FALSE), (1, 14, 1, FALSE), (1, 15, 1, FALSE), (1, 16, 1, FALSE),
+
+(2, 17, 2, FALSE), (2, 18, 2, FALSE), (2, 19, 2, FALSE), (2, 20, 2, FALSE),
+(2, 21, 2, FALSE), (2, 22, 2, FALSE), (2, 23, 2, FALSE), (2, 24, 2, FALSE),
+(2, 25, 2, FALSE), (2, 26, 2, FALSE), (2, 27, 2, FALSE), (2, 28, 2, FALSE),
+(2, 29, 2, FALSE), (2, 30, 2, FALSE), (2, 31, 2, FALSE), (2, 32, 2, FALSE),
+
+(3, 33, 3, FALSE), (3, 34, 3, FALSE), (3, 35, 3, FALSE), (3, 36, 3, FALSE),
+(3, 37, 3, FALSE), (3, 38, 3, FALSE), (3, 39, 3, FALSE), (3, 40, 3, FALSE),
+(3, 41, 3, FALSE), (3, 42, 3, FALSE), (3, 43, 3, FALSE), (3, 44, 3, FALSE),
+(3, 45, 3, FALSE), (3, 46, 3, FALSE), (3, 47, 3, FALSE), (3, 48, 3, FALSE),
+
+(4, 49, 4, FALSE), (4, 50, 4, FALSE), (4, 51, 4, FALSE), (4, 52, 4, FALSE),
+(4, 53, 4, FALSE), (4, 54, 4, FALSE), (4, 55, 4, FALSE), (4, 56, 4, FALSE),
+(4, 57, 4, FALSE), (4, 58, 4, FALSE), (4, 59, 4, FALSE), (4, 60, 4, FALSE),
+(4, 61, 4, FALSE), (4, 62, 4, FALSE), (4, 63, 4, FALSE), 
+
+(5, 65, 5, FALSE), (5, 66, 5, FALSE), (5, 67, 5, FALSE), (5, 68, 5, FALSE),
+(5, 69, 5, FALSE), (5, 70, 5, FALSE), (5, 71, 5, FALSE), (5, 72, 5, FALSE),
+(5, 73, 5, FALSE), (5, 74, 5, FALSE), (5, 75, 5, FALSE), (5, 76, 5, FALSE),
+(5, 77, 5, FALSE), (5, 78, 5, FALSE), (5, 79, 5, FALSE), (5, 80, 5, FALSE),
+
+(6, 81, 6, FALSE), (6, 82, 6, FALSE), (6, 83, 6, FALSE), (6, 84, 6, FALSE),
+(6, 85, 6, FALSE), (6, 86, 6, FALSE), (6, 87, 6, FALSE), (6, 88, 6, FALSE),
+(6, 89, 6, FALSE), (6, 90, 6, FALSE), (6, 91, 6, FALSE), (6, 92, 6, FALSE),
+(6, 93, 6, FALSE), (6, 94, 6, FALSE), (6, 95, 6, FALSE), (6, 96, 6, FALSE),
+
+(7, 97, 7, FALSE), (7, 98, 7, FALSE), (7, 99, 7, FALSE), (7, 100, 7, FALSE),
+(7, 101, 7, FALSE), (7, 102, 7, FALSE), (7, 103, 7, FALSE), (7, 104, 7, FALSE),
+(7, 105, 7, FALSE), (7, 106, 7, FALSE), (7, 107, 7, FALSE), (7, 108, 7, FALSE),
+(7, 109, 7, FALSE), (7, 110, 7, FALSE), (7, 111, 7, FALSE), (7, 112, 7, FALSE),
+
+(8, 113, 8, FALSE), (8, 114, 8, FALSE), (8, 115, 8, FALSE), (8, 116, 8, FALSE),
+(8, 117, 8, FALSE), (8, 118, 8, FALSE), (8, 119, 8, FALSE), (8, 120, 8, FALSE),
+(8, 121, 8, FALSE), (8, 122, 8, FALSE), (8, 123, 8, FALSE), (8, 124, 8, FALSE),
+(8, 125, 8, FALSE), (8, 126, 8, FALSE), (8, 127, 8, FALSE), (8, 128, 8, FALSE),
+
+(9, 129, 9, FALSE), (9, 130, 9, FALSE), (9, 131, 9, FALSE), (9, 132, 9, FALSE),
+(9, 133, 9, FALSE), (9, 134, 9, FALSE), (9, 135, 9, FALSE), (9, 136, 9, FALSE),
+(9, 137, 9, FALSE), (9, 138, 9, FALSE), (9, 139, 9, FALSE), (9, 140, 9, FALSE),
+(9, 141, 9, FALSE), (9, 142, 9, FALSE), (9, 143, 9, FALSE), (9, 144, 9, FALSE),
+(10, 145, 10, FALSE), (10, 146, 10, FALSE), (10, 147, 10, FALSE), (10, 148, 10, FALSE),
+(10, 149, 10, FALSE), (10, 150, 10, FALSE), (10, 151, 10, FALSE), (10, 152, 10, FALSE),
+(10, 153, 10, FALSE), (10, 154, 10, FALSE), (10, 155, 10, FALSE), (10, 156, 10, FALSE),
+(10, 157, 10, FALSE), (10, 158, 10, FALSE), (10, 159, 10, FALSE), (10, 160, 10, FALSE);
+
+INSERT INTO shown_in (MovieID, HallID, Date, Start_time)
+VALUES
+(1, 1, '2025-01-01', '18:00:00'),
+(1, 1, '2025-01-02', '20:00:00'),
+(2, 2, '2025-01-01', '19:00:00'),
+(2, 2, '2025-01-03', '21:00:00'),
+(3, 3, '2025-01-01', '18:30:00'),
+(3, 3, '2025-01-04', '20:30:00'),
+(4, 4, '2025-01-01', '22:00:00'),
+(4, 4, '2025-01-05', '23:00:00'),
+(5, 5, '2025-01-02', '17:00:00'),
+(5, 5, '2025-01-06', '19:00:00'),
+(6, 6, '2025-01-03', '20:00:00'),
+(6, 6, '2025-01-07', '22:30:00'),
+(7, 7, '2025-01-02', '19:30:00'),
+(7, 7, '2025-01-08', '21:00:00'),
+(8, 8, '2025-01-03', '18:30:00'),
+(8, 8, '2025-01-09', '20:30:00'),
+(9, 9, '2025-01-04', '19:00:00'),
+(9, 9, '2025-01-10', '21:00:00'),
+(10, 10, '2025-01-05', '18:00:00'),
+(10, 10, '2025-01-11', '20:00:00');
+select * from movie_show;
+select * from hall_seat;
+select * from Customer;
+
+SELECT COUNT(*) AS Total_Customers FROM Customer;
+
+SELECT COUNT(*) AS Total_Bookings FROM Ticket;
+
+SELECT COUNT(*) AS Movies_Available FROM Movie;
+
+SELECT customer_id AS 'Customer ID', 
+       customer_name AS 'First Name', 
+       customer_phone AS 'Last Name', 
+       customer_feedback AS 'Address'
+FROM Customer
+ORDER BY customer_id DESC
+LIMIT 5;
+
+SELECT DATE_FORMAT(Date, '%Y-%m') AS Month, 
+       COUNT(*) AS Total_Bookings
+FROM Ticket
+GROUP BY DATE_FORMAT(Date, '%Y-%m')
+ORDER BY Month DESC;
+
+SELECT tv.Employee_id AS 'SalesPerson ID', 
+       e.Employee_name AS 'First Name', 
+       NULL AS 'Last Name', 
+       SUM(t.Price) AS 'Total Sales'
+FROM Ticket t
+JOIN Ticket_vendor tv ON t.VendorID = tv.Employee_id
+JOIN Employees e ON tv.Employee_id = e.Employee_id
+GROUP BY tv.Employee_id, e.Employee_name;
+
+SELECT m.MovieName AS 'Movie Name', 
+       COUNT(t.TicketID) AS 'Total Bookings'
+FROM Ticket t
+JOIN Movie m ON t.MovieID = m.MovieID
+GROUP BY t.MovieID, m.MovieName
+ORDER BY COUNT(t.TicketID) DESC
+LIMIT 5;
+
+SELECT SaleDate, SUM(Total_Price) AS TotalFoodRevenue
+FROM Sales
+GROUP BY SaleDate
+ORDER BY SaleDate DESC;
+
+-- Identify customers who have made the most bookings and provided the most feedback.
+SELECT CustomerID, customer_name, COUNT(TicketID) AS TotalBookings
+FROM Ticket
+JOIN Customer ON Ticket.CustomerID = Customer.customer_id
+GROUP BY CustomerID, customer_name
+ORDER BY TotalBookings DESC
+LIMIT 5;
+
+SELECT customer_id, customer_name, customer_feedback
+FROM Customer
+WHERE customer_feedback IS NOT NULL
+ORDER BY customer_id DESC
+LIMIT 10;
+
+-- Analyze seat utilization to identify which halls or rows are most frequently booked.
+SELECT HallID, COUNT(*) AS TotalSeatsBooked
+FROM hall_seat
+WHERE IsBooked = TRUE
+GROUP BY HallID
+ORDER BY TotalSeatsBooked DESC;
+
+-- Track the performance of each movie in terms of tickets sold per show, and total revenue
+SELECT m.MovieName, COUNT(t.TicketID) AS TicketsSold, SUM(t.Price) AS Revenue
+FROM Ticket t
+JOIN Movie m ON t.MovieID = m.MovieID
+GROUP BY m.MovieName
+ORDER BY TicketsSold DESC;
+
+
+-- Evaluate the performance of cashiers and ticket vendors based on sales and bookings handled.
+-- For cashiers
+SELECT c.Employee_id, e.Employee_name, SUM(s.Total_Price) AS TotalSales
+FROM Sales s
+JOIN Cashier c ON s.CashierID = c.Employee_id
+JOIN Employees e ON c.Employee_id = e.Employee_id
+GROUP BY c.Employee_id, e.Employee_name
+ORDER BY TotalSales DESC;
+
+-- ticket vendors
+SELECT tv.Employee_id, e.Employee_name, COUNT(t.TicketID) AS TicketsHandled
+FROM Ticket t
+JOIN Ticket_vendor tv ON t.VendorID = tv.Employee_id
+JOIN Employees e ON tv.Employee_id = e.Employee_id
+GROUP BY tv.Employee_id, e.Employee_name
+ORDER BY TicketsHandled DESC;
+
+
+
+
+
+

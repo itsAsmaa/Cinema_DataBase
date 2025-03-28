@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/icon" href="../static/img/logo.jpg"/>
+    <title>Movie Management</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #28313b;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #1e1e1e;
+            padding-top: 20px;
+            overflow-x: hidden;
+            transition: width 0.4s ease-in-out;
+        }
+
+        .sidebar:hover {
+            width: 250px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 20px;
+            color: white;
+            display: block;
+            transition: padding 0.4s ease-in-out;
+        }
+
+        .sidebar a:hover {
+            padding: 10px 25px;
+        }
+
+        .content {
+            margin-left: 50px;
+            padding: 20px;
+            transition: margin-left 0.4s ease-in-out;
+        }
+
+        .sidebar:hover ~ .content {
+            margin-left: 250px;
+        }
+
+        .btn-primary, .btn-secondary {
+            margin-top: 10px;
+        }
+
+        table {
+            color: white;
+        }
+
+        footer {
+            background-color: #1e1e1e;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .sidebar {
+        height: 100%;
+        width: 50px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #bf5bea; /* لون أرجواني */
+        padding-top: 20px;
+        overflow-x: hidden;
+        transition: width 0.4s ease-in-out;
+        border-right: 5px solid rgba(255, 255, 255, 0.5); /* إطار مضيء */
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); /* تأثير إضاءة */
+    }
+
+    .sidebar:hover {
+        width: 250px;
+    }
+
+    .sidebar a {
+        padding: 10px 15px;
+        text-decoration: none;
+        font-size: 20px;
+        color: white;
+        display: block;
+        transition: padding 0.4s ease-in-out;
+    }
+
+    .sidebar a:hover {
+        padding: 10px 25px;
+        color: #ff69b4; /* لون وردي عند التمرير */
+    }
+    </style>
+</head>
+<body>
+  
+<div class="content">
+    <nav class="navbar navbar-dark bg-mynav">
+        <div class="container-fluid">
+            <!-- <a class="navbar-brand" href="#" style="
+            color: white; 
+            background-color: #6a0dad; 
+            padding: 10px 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); 
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;">
+            Movie Management
+        </a> -->
+                </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4"  style="
+        color: white; 
+        background-color: #bf5bea; 
+        padding: 10px 20px; 
+        border-radius: 10px; 
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); 
+        text-decoration: none;
+        transition: all 0.3s ease-in-out;">Manage Movies</h1>
+
+        <!-- Search Section -->
+        <div class="d-flex mb-4">
+            <select id="searchAttribute" class="form-select" style="width: 200px; margin-right: 10px;" title="l">
+                <option value="MovieID">ID</option>
+                <option value="MovieName">Name</option>
+                <option value="Director">Director</option>
+                <option value="Language">Language</option>
+                <option value="Title">Title</option>
+                <option value="Genre">Genre</option>
+                <option value="Release_Date">Release Date</option>
+                <option value="Duration">Duration</option>
+                <option value="Movie_Description">Description</option>
+                <option value="PosterPath">Poster Path</option>
+                <option value="Price">Price</option>
+
+            </select>
+            <input type="text" id="searchValue" class="form-control" placeholder="Search...">
+            <button class="btn btn-primary ms-2" onclick="searchMovies()">Search</button>
+            <button class="btn btn-secondary ms-2" onclick="fetchMovies()">Reload</button>
+        </div>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Director</th>
+                    <th>Language</th>
+                    <th>Title</th>
+                    <th>Genre</th>
+                    <th>Release Date</th>
+                    <th>Duration</th>
+                    <th>Description</th>
+                    <th>Price$</th>
+                    <th>Poster</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="movieTable">
+                <tr>
+                    <td colspan="12" class="text-center">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+        
+
+
+        <!-- Add Movie Section -->
+        <div id="addMovieSection" class="mt-4">
+            <h2>Add New Movie</h2>
+
+            <form id="addMovieForm">
+                <div class="mb-3">
+                    <label for="movieID" class="form-label">Movie ID</label>
+                    <input type="number" class="form-control" id="movieID" required>
+                </div>
+                <div class="mb-3">
+                    <label for="movieName" class="form-label">Movie Name</label>
+                    <input type="text" class="form-control" id="movieName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="director" class="form-label">Director</label>
+                    <input type="text" class="form-control" id="director" required>
+                </div>
+                <div class="mb-3">
+                    <label for="language" class="form-label">Language</label>
+                    <input type="text" class="form-control" id="language" required>
+                </div>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="genre" class="form-label">Genre</label>
+                    <input type="text" class="form-control" id="genre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="releaseDate" class="form-label">Release Date</label>
+                    <input type="date" class="form-control" id="releaseDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="duration" class="form-label">Duration (minutes)</label>
+                    <input type="number" class="form-control" id="duration" required>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price ($)</label>
+                    <input type="number" class="form-control" id="price" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="movieDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="movieDescription" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                
+                    <label for="posterPath" class="form-label">Poster Path</label>
+                    <input type="text" class="form-control" id="posterPath" required>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="addMovie()">Add Movie</button>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchMovies();
+    });
+
+    function fetchMovies() {
+    fetch('/api/movies')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('movieTable');
+            tableBody.innerHTML = '';
+
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="12" class="text-center">No movies found.</td></tr>';
+                return;
+            }
+
+            data.forEach(movie => {
+                const row = `
+                    <tr>
+                        <td>${movie.MovieID}</td>
+                        <td>${movie.MovieName}</td>
+                        <td>${movie.Director}</td>
+                        <td>${movie.Language}</td>
+                        <td>${movie.Title}</td>
+                        <td>${movie.Genre}</td>
+                        <td>${movie.Release_Date}</td>
+                        <td>${movie.Duration}</td>
+                        <td>${movie.Movie_Description}</td>
+                        <td>${movie.Price}$</td>
+                        <td><img src="${movie.PosterPath}" alt="Poster" style="width: 50px; height: auto;"></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="location.href='/update-movie?movie_id=${movie.MovieID}'">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteMovie(${movie.MovieID})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        })
+        .catch(error => console.error('Error fetching movies:', error));
+}
+
+
+  
+function editMovie(movieID) {
+    const movieData = {
+        MovieName: document.getElementById('editMovieName').value,
+        Director: document.getElementById('editDirector').value,
+        Language: document.getElementById('editLanguage').value,
+        Title: document.getElementById('editTitle').value,
+        Genre: document.getElementById('editGenre').value,
+        Release_Date: document.getElementById('editReleaseDate').value,
+        Duration: document.getElementById('editDuration').value,
+        Movie_Description: document.getElementById('editDescription').value,
+        PosterPath: document.getElementById('editPosterPath').value
+    };
+    function navigateToUpdatePage(movieID) {
+    window.location.href = `/update-movie?movie_id=${movieID}`;
+}
+
+
+    fetch(`/api/movies/${movieID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(movieData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || 'Movie updated successfully!');
+        fetchMovies();
+    })
+    .catch(error => console.error('Error updating movie:', error));
+}
+function searchMovies() {
+    const attribute = document.getElementById('searchAttribute').value;
+    const value = document.getElementById('searchValue').value;
+
+    if (!value) {
+        alert('Please enter a search value.');
+        return;
+    }
+
+    fetch(`/api/movies/search?attribute=${attribute}&value=${value}`)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('movieTable');
+            tableBody.innerHTML = '';
+
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="11" class="text-center">No movies found.</td></tr>';
+                return;
+            }
+
+            data.forEach(movie => {
+    const row = `
+        <tr>
+            <td>${movie.MovieID}</td>
+            <td>${movie.MovieName}</td>
+            <td>${movie.Director}</td>
+            <td>${movie.Language}</td>
+            <td>${movie.Title}</td>
+            <td>${movie.Genre}</td>
+            <td>${movie.Release_Date}</td>
+            <td>${movie.Duration}</td>
+            <td>${movie.Movie_Description}</td>
+            <td><img src="${movie.PosterPath}" alt="Poster" style="width: 50px; height: auto;"></td>
+            <td>${movie.Price}$</td>
+            <td>
+                <button class="btn btn-warning btn-sm" onclick="location.href='/update-movie?movie_id=${movie.MovieID}'">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteMovie(${movie.MovieID})">Delete</button>
+            </td>
+        </tr>
+    `;
+    tableBody.innerHTML += row;
+});
+
+        })
+        .catch(error => console.error('Error searching movies:', error));
+}
+
+    function deleteMovie(movieID) {
+    fetch(`/api/movies/${movieID}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || 'Movie deleted successfully!');
+        fetchMovies(); // تحديث القائمة بعد الحذف
+    })
+    .catch(error => console.error('Error deleting movie:', error));
+}
+
+function addMovie() {
+    const movieData = {
+        MovieID: document.getElementById('movieID').value,
+        MovieName: document.getElementById('movieName').value,
+        Director: document.getElementById('director').value,
+        Language: document.getElementById('language').value,
+        Title: document.getElementById('title').value,
+        Genre: document.getElementById('genre').value,
+        Release_Date: document.getElementById('releaseDate').value,
+        Duration: document.getElementById('duration').value,
+        Movie_Description: document.getElementById('movieDescription').value,
+        price:document.getElementById('price').value,
+        PosterPath: document.getElementById('posterPath').value
+    };
+
+    fetch('/api/movies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(movieData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+            fetchMovies(); // تحديث القائمة بعد الإضافة
+        } else if (data.error) {
+            alert(data.error);
+        }
+    })
+    .catch(error => console.error('Error adding movie:', error));
+}
+
+</script>
+
+</body>
+</html>
